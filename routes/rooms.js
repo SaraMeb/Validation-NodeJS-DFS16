@@ -92,74 +92,78 @@ router.post('/', function(req, res, next) {
   })
 });
 
-/* detail d'un filpbook */
-// router.get('/:id', function(req, res, next) {
-//   let bookId = req.params.id;
-//
-//     Mongo.getInstance()
-//     .collection('rooms')
-//     .findOne({_id: ObjectId(bookId)}, function (err, result) {
-//         if (err) {
-//           return res.json({
-//             status: false,
-//             message: err.message
-//           })
-//         }
-//         return res.json({status : true, result: result});
-//     })
-//   });
+/* detail d'une room */
+router.get('/:id', function(req, res, next) {
+  let roomId = req.params.id;
+
+    Mongo.getInstance()
+    .collection('rooms')
+    .findOne({_id: ObjectId(roomId)}, function (err, result) {
+        if (err) {
+          return res.json({
+            status: false,
+            message: err.message
+          })
+        }
+        return res.json({status : true, result: result});
+    })
+  });
 
 
-/* edition d'un filpbook */
-// router.put('/:id', function(req, res, next) {
-//   let errors = [];
-//   if (!req.body.title) {
-//     errors.push('Titre');
-//   }
-//   if (!req.body.description) {
-//     errors.push('Description');
-//   }
-//
-//   if(errors.length) {
-//     return next(createError(412, "Merci de vérifier les champs : "+errors.join(', ')));
-//   }
-//   console.log(req.body);
-//   let bookId = req.params.id;
-//   let datas = {
-//     title: req.body.title,
-//     description: req.body.description,
-//   }
-//   Mongo.getInstance()
-//   .collection('rooms')
-//   .updateOne({_id : ObjectId(bookId)}, {$set:datas},
-//     function(err, result) {
-//       if (err) {
-//           return  res.json({
-//             status : false,
-//             message: err.message
-//           })
-//
-//       }
-//       res.json({status : true});
-//   })
-//
-// });
+/* edition d'une room */
+router.put('/:id', function(req, res, next) {
+  let errors = [];
+  if (!req.body.name) {
+    errors.push('Nom de la room');
+  }
+  if (!req.body.status) {
+    errors.push('Status');
+  }
+  if (!req.body.users) {
+    errors.push('Users');
+  }
 
-/* suppression d'un filpbook */
-// router.delete('/:id', function(req, res, next) {
-//   // console.log(req.params.id);
-//   let bookId = req.params.id;
-//   Mongo.getInstance()
-//   .collection('rooms')
-//   .deleteOne({_id : ObjectId(bookId)}, function(err, result) {
-//       if (err) {
-//           return  res.json({
-//             status : false,
-//             message: err.message
-//           })
-//       }
-//       res.json({status : true});
-//   })
-// });
+  if(errors.length) {
+    return next(createError(412, "Merci de vérifier les champs : "+errors.join(', ')));
+  }
+  console.log(req.body);
+  let roomId = req.params.id;
+  let datas = {
+    name: req.body.name,
+    status: req.body.status,
+    users: req.body.users,
+  }
+  Mongo.getInstance()
+  .collection('rooms')
+  .updateOne({_id : ObjectId(roomId)}, {$set:datas},
+    function(err, result) {
+      if (err) {
+          return  res.json({
+            status : false,
+            message: err.message
+          })
+
+      }
+      res.json({status : true});
+  })
+
+});
+
+/* suppression d'une room */
+router.delete('/:id', function(req, res, next) {
+  // console.log(req.params.id);
+  let roomId = req.params.id;
+  Mongo.getInstance()
+  .collection('rooms')
+  .deleteOne({_id : ObjectId(roomId)}, function(err, result) {
+      if (err) {
+          return  res.json({
+            status : false,
+            message: err.message
+          })
+      }
+      res.json({status : true});
+  })
+});
 
 module.exports = router;
