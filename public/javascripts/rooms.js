@@ -50,7 +50,6 @@ for (var i = 0; i < updateButtons.length; i++) {
     .then(function (response) {
         if (response.status) {
           console.log(response.result);
-          debugger;
           document.getElementById('updatedRoomID').value = response.result._id;
           document.getElementById('updatedName').value = response.result.name;
         } else {
@@ -64,7 +63,6 @@ for (var i = 0; i < updateButtons.length; i++) {
 document.getElementById('editRoom').addEventListener('submit', function(event) {
     event.preventDefault();
     console.log(event.target);
-    // debugger;
     var roomId = event.target.id.value;
     var name = event.target.name.value;
     var status = event.target.status.value;
@@ -81,7 +79,10 @@ document.getElementById('editRoom').addEventListener('submit', function(event) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          name:name
+          name:name,
+          status:status,
+          users:users
+
         })
     })
         .then(function (r) { return r.json() })
