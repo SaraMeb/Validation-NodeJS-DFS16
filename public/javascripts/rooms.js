@@ -37,7 +37,7 @@ for (var i = 0; i < updateButtons.length; i++) {
     var roomId = event.currentTarget.getAttribute('id');
     console.log(roomId);
     // debugger;
-    fetch('/admin/' + roomId, {
+    fetch('/rooms/' + roomId, {
         method: 'get',
         headers: {
             'Accept': 'application/json'
@@ -50,6 +50,7 @@ for (var i = 0; i < updateButtons.length; i++) {
     .then(function (response) {
         if (response.status) {
           console.log(response.result);
+          debugger;
           document.getElementById('updatedRoomID').value = response.result._id;
           document.getElementById('updatedName').value = response.result.name;
         } else {
@@ -74,14 +75,13 @@ document.getElementById('editRoom').addEventListener('submit', function(event) {
         'status': status,
         'users': users
     };
-    fetch('/admin/' + roomId, {
+    fetch('/rooms/' + roomId, {
         method: 'put',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          title:title,
-          description:description
+          name:name
         })
     })
         .then(function (r) { return r.json() })
