@@ -21,12 +21,11 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage});
 
 
-/* admin avec formulaire login/creation */
+/* user avec formulaire login */
 router.get('/', function(req, res, next) {
   if(req.session.user) {
     return next() ;
   }
-  res.render('rooms/index', {title:"Rooms"});
 });
 
 router.use(function(req, res, next) {
@@ -50,28 +49,26 @@ router.get('/', function(req, res, next) {
 
 /* creation d'une chatroom */
 
-router.post('/', upload.single('file'), function(req, res, next) {
+router.post('/', function(req, res, next) {
   let errors = [];
-  if (!req.body.title) {
-    errors.push('Titre');
+  if (!req.body.name) {
+    errors.push('Nom de la room');
   }
-  if (!req.body.description) {
-    errors.push('Description');
+  if (!req.body.status) {
+    errors.push('Status');
   }
-  if (!req.file) {
-    errors.push('PDF !');
+  if (!req.body.users) {
+    errors.push('Users list');
   }
 
   if(errors.length) {
     return next(createError(412, "Merci de vérifier les champs : "+errors.join(', ')));
   }
   let datas = {
-    title: req.body.title,
-    description: req.body.description,
-    file: req.file.filename,
-    publisher: req.session.user.username,
-    publishDate: new Date(),
-    status:'draft'
+    name: req.body.name,
+    status: req.body.status,
+    owner: req.session.user.username,
+    users: req.body.users,
   }
   Mongo.getInstance()
   .collection('rooms')
@@ -85,7 +82,7 @@ router.post('/', upload.single('file'), function(req, res, next) {
           })
         }
       }
-      res.redirect('/admin');
+      res.redirect('/rooms');
   })
 });
 
