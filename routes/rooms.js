@@ -42,7 +42,13 @@ router.get('/', function(req, res, next) {
   .collection('rooms')
   .find()
   .toArray((err, rooms) => {
-    res.render('rooms/index', {title:"Liste des rooms", rooms:rooms});
+    Mongo.getInstance()
+    .collection('users')
+    .find()
+    .toArray((err, users) => {
+      // res.render('users/index', {title:"Liste des users", users:users, req: req});
+      res.render('rooms/index', {title:"Liste des rooms", rooms:rooms, users:users, req: req});
+    })
   })
 
 });
@@ -67,7 +73,7 @@ router.post('/', function(req, res, next) {
   let datas = {
     name: req.body.name,
     status: req.body.status,
-    owner: req.session.user.username,
+    owner: req.session.user._id,
     users: req.body.users,
   }
   Mongo.getInstance()
